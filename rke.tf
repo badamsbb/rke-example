@@ -17,7 +17,7 @@ resource "packet_device" "rke_control" {
   billing_cycle    = "hourly"
   connection {
     user = "root"
-    private_key = "${file("${var.ssh_key_path}")}"
+    private_key = "${file("${var.ssh_private_key_path}")}"
   }
 
   depends_on = [
@@ -26,10 +26,10 @@ resource "packet_device" "rke_control" {
 
   provisioner "remote-exec" {
     inline = [
-      "apt install apt-transport-https ca-certificates curl software-properties-common",
+      "apt update -q && apt install -qy apt-transport-https ca-certificates curl software-properties-common",
       "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
       "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"",
-      "apt update && apt install docker-ce=17.03.0~ce-0~ubuntu-xenial"
+      "apt update -q && apt install -qy docker-ce=17.03.0~ce-0~ubuntu-xenial"
     ]
   }
 }
@@ -44,7 +44,7 @@ resource "packet_device" "rke_worker" {
   billing_cycle    = "hourly"
   connection {
     user = "root"
-    private_key = "${file("${var.ssh_key_path}")}"
+    private_key = "${file("${var.ssh_private_key_path}")}"
   }
 
   depends_on = [
@@ -53,10 +53,10 @@ resource "packet_device" "rke_worker" {
 
   provisioner "remote-exec" {
     inline = [
-      "apt install apt-transport-https ca-certificates curl software-properties-common",
+      "apt update -q && apt install -qy apt-transport-https ca-certificates curl software-properties-common",
       "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
       "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"",
-      "apt update && apt install docker-ce=17.03.0~ce-0~ubuntu-xenial"
+      "apt update -q && apt install -qy docker-ce=17.03.0~ce-0~ubuntu-xenial"
     ]
   }
 }
